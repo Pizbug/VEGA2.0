@@ -1,0 +1,25 @@
+
+
+CPP=g++
+
+all:	main.o input.o memalloc.o meshgenerator.o postprocess.o separatrix.o svc.o vega.o
+	$(CPP) -o vega2.0 main.o input.o memalloc.o meshgenerator.o postprocess.o separatrix.o svc.o vega.o
+main.o:	main.cpp
+	$(CPP) -c -o main.o main.cpp
+input.o: input.cpp
+	$(CPP) -c -o input.o input.cpp
+memalloc.o: memalloc.cpp
+	$(CPP) -c -o memalloc.o memalloc.cpp
+meshgenerator.o: meshgenerator.cpp
+	$(CPP) -c -o meshgenerator.o meshgenerator.cpp
+postprocess.o: postprocess.cpp
+	$(CPP) -c -o postprocess.o postprocess.cpp
+separatrix.o: separatrix.cpp
+	$(CPP) -c -o separatrix.o separatrix.cpp
+svc.o: svc.cpp
+	$(CPP) -c -o svc.o svc.cpp
+vega.o: vega.cpp
+	$(CPP) -c -o vega.o vega.cpp
+
+clean:
+	rm *.o
