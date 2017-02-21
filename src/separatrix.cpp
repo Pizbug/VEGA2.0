@@ -556,8 +556,10 @@ void EXEMPTION(SYSALL& sys, int iXp, double r, double z,
 	di = alloc_vector<int>(0, 11);
 	d = alloc_vector<double>(0, 11);
 
-	DoAllDomain(i, 12)
-		di[i] = d[i] = 100;
+	DoAllDomain(i, 12) {
+		d[i] = 100.0;
+		di[i] = 100;
+	}
 
 	a = (f.Xp[iXp].z - z) / (f.Xp[iXp].r - r);
 	b = -1.;
@@ -1007,3 +1009,4 @@ void FRAME(SYSALL& sys) {
 
 	printf("Done!\t  # of segments: %d\n", m.Sn);
 }
+

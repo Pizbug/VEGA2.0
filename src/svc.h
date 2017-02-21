@@ -140,3 +140,4 @@ inline double SPLINE1D(double* r, int fi, double ff,
 }
 
 #endif
+

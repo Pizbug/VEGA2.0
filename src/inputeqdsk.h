@@ -19,3 +19,4 @@ void read_input(SYSALL& sys);
 
 
 #endif
+

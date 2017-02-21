@@ -65,6 +65,7 @@ void memalloc_mes(MESHDATA& mes) {
 	mes.nD	 = alloc_vector<int>(0, MGD);
 	mes.dP   = alloc_vector<double>(0, MGD);
 	mes.EDS  = alloc_matrix<double>(0, MGD, 0, 2);
+	mes.GS	 = alloc_vector<double>(0, 2);
 
 	mes.Mr = alloc_matrix<double>(0, 2 * HALF - 1, 0, KMAX - 1);
 	mes.Mz = alloc_matrix<double>(0, 2 * HALF - 1, 0, KMAX - 1);

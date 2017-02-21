@@ -100,6 +100,8 @@ struct MESHDATA{
 
 	dmatrix EDS			;	//	EDS Factors; SIZE = [MGD][3]
 
+	dvector GS			;	//	Grid Scope
+
 	dmatrix	Mr			;
 	dmatrix Mz			;
 

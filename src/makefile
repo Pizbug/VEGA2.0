@@ -1,8 +1,8 @@
 
 .SUFFIXES: .cpp .o	
-CXX=icpc
+CXX=g++
 CPPFLAGS=-O3
-INCLUDE=-I/home/leclexa/python/Python-2.7.9 -I/home/leclexa/python/Python-2.7.9/Include
+INCLUDE=-I/usr/include/python2.4
 OBJS=main.o inputeqdsk.o memalloc.o meshgenerator.o postprocess.o separatrix.o vega.o
 
 all: ${OBJS}

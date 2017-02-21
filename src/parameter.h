@@ -12,11 +12,12 @@
 #define NMAX	200
 #define KMAX	300
 
-#define PENET	0.995
+/*#define PENET	0.995
 #define SOLP	0.08
-#define PRIP	0.08
+#define PRIP	0.08*/
 #define EPS		1e-6
 #define HALF	60
 
 
 #endif
+

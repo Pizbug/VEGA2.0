@@ -177,3 +177,4 @@ double BiliInterp(double **f, double *x, double *y,
 		+ f[i + 1][j + 1] * (xx - x[i]) * (yy - y[j]))
 		/ ((x[i + 1] - x[i]) * (y[j + 1] - y[j]));
 }
+

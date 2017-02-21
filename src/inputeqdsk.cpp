@@ -64,6 +64,10 @@ void read_par(SYSALL& sys){
 	DoAllDomain(i, MGD)	printf(" %d ", m.nD[i]);
 	printf("\n");
 
+	get_id(in, "GRID_SCOPE");
+	fscanf(in, "%lf\t%lf\t%lf", &m.GS[0], &m.GS[1], &m.GS[2]);
+	printf("  Grid scope: %.4f, %.4f, %.4f\t(XO, SOL, Priv)\n",m.GS[0],m.GS[1],m.GS[2]);
+	
 	get_id(in, "EDS");
 	DoAllDomain(i, MGD)
 		fscanf(in, "%lf %lf %lf\n", &m.EDS[i][0], &m.EDS[i][1], &m.EDS[i][2]);
