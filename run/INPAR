@@ -10,10 +10,10 @@ input/DDN_DIIID
 g153682.04505
 
 @GRID_Dist	(Co, IBdy, OBdy, IDt, ODt, SOL, Acitive SOL, Pr, Active Pr)
-61	41	41	10	20	10	0	10	0
+61 41 41 10 10 10 0 10 0
 
 @GRID_SCOPE	(XO Penet, SOL, PRIV)
-0.995	0.08	0.02
+0.995	0.04	0.03
 
 @EDS	3x(Co, IBdy, OBdy, IDt, ODt, SOL, Acitive SOL, Pr, Active Pr)
 -1.0, 0.0, 3.0
