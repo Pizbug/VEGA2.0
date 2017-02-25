@@ -11,11 +11,11 @@
 
 
 #define max(a,b) (((a)>(b))?(a):(b))
-#define min(a,b) (((a)<(b))?(a):(b)) 
+#define min(a,b) (((a)<(b))?(a):(b))
 #define sqr(x) ((x)*(x))
 #define pow2(x) ((x)*(x))
-#define div_n(i,a,b,n) ((a)+((b)-(a))*((i)-1.0)/((double)(n)-1.0))  
-#define del_n(a,b,n) (((b)-(a))/((double)(n)-1.0))                
+#define div_n(i,a,b,n) ((a)+((b)-(a))*((i)-1.0)/((double)(n)-1.0))
+#define del_n(a,b,n) (((b)-(a))/((double)(n)-1.0))
 #define distance(x1,y1,x2,y2) (sqrt(((x2)-(x1))*((x2)-(x1))+((y2)-(y1))*((y2)-(y1))))
 #define inorout(ax,ay,bx,by,x,y)	(((bx-ax)*(y-ay)-(by-ay)*(x-ax))*y)
 				//	possitive -> inner, negative -> outer
@@ -26,7 +26,15 @@
 #define	BTWN(v, a, b)		((v) >= (a) && (v) < (b)) || ((v) < (a) && (v) >= (b))
 #define	LINEAR1D(r1,r2,f1,f2,f)		(r1) + ((f)-(f1))*((r2)-(r1))/((f2)-(f1))
 
-#define Errmsg(X,N) {printf("%s\n",X);exit(N);}
+#define GETIJ(r, z) i = (int)((r + dr - g.r[0]) / (g.r[1] - g.r[0]));\
+					j = (int)((z + dz - g.z[0]) / (g.z[1] - g.z[0]));\
+					if (i < 0)		i = 0;\
+					if (j < 0)		j = 0;\
+					if (i > g.rN - 1)	i = g.rN - 1;\
+					if (j > g.zN - 1)	j = g.zN - 1;
+#define BIPSI(r, z)	f.Psi00[i][j] + f.Psi10[i][j] * r + f.Psi01[i][j] * z + f.Psi11[i][j] * r * z
+
+#define Errmsg(X,N) {printf("%s: %d\n",X,N);exit(N);}
 #define MAXSW 100
 static time_t start_time[MAXSW],end_time[MAXSW];
 static double etime[MAXSW];
@@ -36,15 +44,15 @@ static double etime[MAXSW];
 inline double LINEAR(double* f,double x,double* xgrd,int n){
     int i;
     double dx=xgrd[1]-xgrd[0];
-    
+
     if(x<=xgrd[0]  ) return f[0  ];
     if(x>=xgrd[n-1]) return f[n-1];
 
     i=(int)((x-xgrd[0])/dx);
     x-=xgrd[i];
-    
+
     return (dx-x)/dx*f[i]+x/dx*f[i+1];
-}    
+}
 
 //	Hold
 inline double SPLINE1D(double* r, int fi, double ff,
@@ -128,7 +136,7 @@ inline double SPLINE1D(double* r, int fi, double ff,
 		c += I[8 + i] * f[i];
 		d += I[12 + i] * f[i];
 	}
-	
+
 	x0 = LINEAR1D(r[fi],r[fi+1],f1,f2,ff);
 
 	DoAllDomain(i, 10) {
@@ -140,4 +148,3 @@ inline double SPLINE1D(double* r, int fi, double ff,
 }
 
 #endif
-

@@ -47,7 +47,7 @@ void FIELD(SYSALL & sys)
 	free_matrix<double>(dVr, 0, rN - 1, 0, zN - 1);
 	free_matrix<double>(dVz, 0, rN - 1, 0, zN - 1);
 
-	printf("(FIELD) -> ");
+//	printf("(FIELD) -> ");
 	/*
 	fclose(out);
 	out = fopen("Br.txt", "w");
@@ -113,7 +113,7 @@ void BILINEAR(SYSALL& sys) {
 			f.Bz11[i][j] = (f.Bz[i][j] - f.Bz[i + 1][j] - f.Bz[i][j + 1] + f.Bz[i + 1][j + 1]) / dxy;
 		}
 	}
-	printf("(BILINEAR) -> ");
+//	printf("(BILINEAR) -> ");
 }
 
 
@@ -271,7 +271,7 @@ void GRAD0(SYSALL& sys) {
 						ovlap = 0;
 						N = NULLSEARCH(sys, ii, jj);	//	Find Null point
 						if (N.id == 1) {
-							T[ntotal] = CROSSLIMT(sys, N.r, N.z);	//	Check the 
+							T[ntotal] = CROSSLIMT(sys, N.r, N.z);	//	Check the
 							if (T[ntotal].id == 1)
 								continue;
 
@@ -331,7 +331,6 @@ void GRAD0(SYSALL& sys) {
 	free_vector<TESTPOINT>(T, 0, 11);
 	free_vector<TESTPOINT>(V, 0, 11);
 
-	printf("(GRAD0)\n");
 	printf("  # of X points: %d\t# of O points: %d\n", f.xpn, f.opn);
 	DoAllDomain(i, f.xpn){
 		printf("  %d: (%.4f,%.4f)\t", i + 1, f.Xp[i].r, f.Xp[i].z);
@@ -359,9 +358,9 @@ void MULTIX(SYSALL& sys) {
 	int			NCNT, PCNT;
 	double		Nval, Pval;
 	double		d, Nd, Pd;
-	TESTPOINT	NXP[2], PXP[2];	//	Dummy for many xpoint. 
+	TESTPOINT	NXP[2], PXP[2];	//	Dummy for many xpoint.
 	TESTPOINT	N, P;			//	Assume only 2 points exist.
-	 
+
 	NCNT = PCNT = 0;
 	Nval = Pval = 0;
 
@@ -378,7 +377,7 @@ void MULTIX(SYSALL& sys) {
 				PCNT++;
 			}
 		}
-		
+
 		DoAllDomain(i, NCNT)
 			Nval += NXP[i].v / ((double)(NCNT));
 
@@ -488,7 +487,7 @@ void FIRSTSTEP(SYSALL& sys, int iXp, dvector r, dvector z, double psi) {
 			dj[(int)(0.5*j + 1.5)] = (int)(0.5 * (jj - f.Xp[iXp].j));
 		}
 	}
-	
+
 	/*
 	di[0] =-2 - (int)(f.dXp[iXp].i / 1.);
 	di[1] = 0 - (int)(f.dXp[iXp].i / 1.);
@@ -556,15 +555,13 @@ void EXEMPTION(SYSALL& sys, int iXp, double r, double z,
 	di = alloc_vector<int>(0, 11);
 	d = alloc_vector<double>(0, 11);
 
-	DoAllDomain(i, 12) {
-		d[i] = 100.0;
-		di[i] = 100;
-	}
+	DoAllDomain(i, 12)
+		di[i] = d[i] = 100;
 
 	a = (f.Xp[iXp].z - z) / (f.Xp[iXp].r - r);
 	b = -1.;
 	c = z - a*r;
-	
+
 	Ar = r - f.Xp[iXp].r;
 	Az = z - f.Xp[iXp].z;
 	A = sqrt(Ar*Ar + Az*Az);
@@ -627,7 +624,7 @@ void GETFIELD(SYSALL& sys, double r, double z, dvector dr, dvector dz, double d)
 /*	VECTORFOLLOW
 Drow line by vector following method -> RUNGE-KUTTA 4th
 */
-void VECTORFOLLOW(SYSALL& sys, double psi, double& r, double& z, 
+void VECTORFOLLOW(SYSALL& sys, double psi, double& r, double& z,
 	double r0, double z0, double d, int drct) {
 	usealias_geo(g, sys);
 	usealias_fld(f, sys);
@@ -698,7 +695,6 @@ void VECTORFOLLOW(SYSALL& sys, double psi, double& r, double& z,
 	}
 }
 
-
 /*	FRAME
 Set frame of entire mesh through lines from X-points
 */
@@ -740,63 +736,19 @@ void FRAME(SYSALL& sys) {
 		}
 	}
 	DoAllDomain(iXp, f.xpn) {
-	//for (iXp = 1; iXp >= 0;iXp--){
 		FIRSTSTEP(sys, iXp, newr, newz, f.Xp[iXp].v);		//	Get first-vector points
-		
-		dmin = distance(g.r[0], g.z[0], g.r[2 + (int)(f.dXp[iXp].i / 2.)], 
-			g.z[1 + (int)(f.dXp[iXp].j / 2.)]) * 1.0;	//	Assume equi-distribution
-		DoAllDomain(i, 12) {	//	Store the Max gradient vector points
-			if (newr[i] != 0) {	//	Right now, middle angle ratio?
-				if(i < 11)
-				DoDomain(j, i + 1, 12) {
-					if (newr[j] != 0) {
-						a = distance(f.Xp[iXp].r, f.Xp[iXp].z, newr[i], newz[i]);
-						b = distance(f.Xp[iXp].r, f.Xp[iXp].z, newr[j], newz[j]);
-						
-						m.MaxGr[i][iXp] = newr[i] + (newr[j] - newr[i]) * a / (a + b);
-						m.MaxGz[i][iXp] = newz[i] + (newz[j] - newz[i]) * a / (a + b);
-						LGi = j;
-						i = j - 1;
-						break;
-					}
-				}
-			}
-		}
-		//	Sum the last term with the first term
-		DoAllDomain(l, 12) {
-			if (newr[l] != 0) {
-				a = distance(f.Xp[iXp].r, f.Xp[iXp].z, newr[LGi], newz[LGi]);
-				b = distance(f.Xp[iXp].r, f.Xp[iXp].z, newr[l], newz[l]);
 
-				m.MaxGr[LGi][iXp] = newr[LGi] + (newr[l] - newr[LGi]) * a / (a + b);
-				m.MaxGz[LGi][iXp] = newz[LGi] + (newz[l] - newz[LGi]) * a / (a + b);
-				break;
-			}
-		}
-		//	Find OX vector
-		dummy2 = 100;
-		DoAllDomain(i, 12) {
-			if (m.MaxGr[i][iXp] != 0) {
-				dummy1 = distance(m.MaxGr[i][iXp], m.MaxGz[i][iXp], f.Op[0].r, f.Op[0].z);
-				if (dummy1 < dummy2) {
-					dummy2 = dummy1;
-					LGi = i;
-				}
-			}
-		}
-		dummy2 = distance(f.Op[0].r, f.Op[0].z, f.Xp[iXp].r, f.Xp[iXp].z);
-		m.MaxGr[LGi][iXp] = f.Xp[iXp].r + (f.Op[0].r - f.Xp[iXp].r) / dummy2 * dmin * 1.;
-		m.MaxGz[LGi][iXp] = f.Xp[iXp].z + (f.Op[0].z - f.Xp[iXp].z) / dummy2 * dmin;
-		if (iXp == 1)	m.MaxGr[LGi][iXp] += (f.Op[0].r - f.Xp[iXp].r) / dummy2 * dmin * 0.;
+		dmin = distance(g.r[0], g.z[0], g.r[2 + (int)(f.dXp[iXp].i / 2.)],
+			g.z[1 + (int)(f.dXp[iXp].j / 2.)]) * 1.0;	//	Assume equi-distribution
 
 		if (k > 0) {						//	To Escape overlaped point
 			DoAllDomain(l, k) {
 				if (iXp == PreV[l].id) {
 					EXEMPTION(sys, iXp, PreV[l].r, PreV[l].z, newr, newz, dmin);
-				}							//	Overlap Flux location -> 0
+				}					//	Overlap Flux location -> 0
 			}
 		}
-		DoAllDomain(i, 12) {	
+		DoAllDomain(i, 12) {
 			if (newr[i] != 0) {
 				//	Considering plasma rotation direction
 				if ((f.Xp[iXp].r > newr[i] && f.Xp[iXp].z > newz[i])
@@ -808,7 +760,7 @@ void FRAME(SYSALL& sys) {
 				}
 				brk = 0;
 				j = 0;
-				nl++;							//	# of Separatrix line
+				nl++;					//	# of Separatrix line
 				Dumr[12 * iXp + i][j] = r = newr[i];
 				Dumz[12 * iXp + i][j] = z = newz[i];
 
@@ -875,34 +827,11 @@ void FRAME(SYSALL& sys) {
 	}
 	m.Sr = alloc_matrix<double>(0, nl - 1, 0, limt);
 	m.Sz = alloc_matrix<double>(0, nl - 1, 0, limt);
-	DoAllDomain(i, nl) 
-		DoAllDomain(j, limt) 
+	DoAllDomain(i, nl)
+		DoAllDomain(j, limt)
 			m.Sr[i][j] = m.Sz[i][j] = 0;
 
 	nl = 0;
-	/*
-	//	Allocate Core Separatrix First
-	DoAllDomain(i, 12 * f.xpn) {
-		if (Dumr[i][0] != 0) {
-			DoDomain(j, 1, limt) {
-				if (Dumr[i][j] == 0)
-					break;
-				DoAllDomain(k, f.xpn) {
-					if ((Dumr[i][j] == f.Xp[k].r) && (Dumz[i][j] == f.Xp[k].z)) {
-						m.Sr[nl][0] = f.Xp[((int)(i / 12))].r;
-						m.Sz[nl][0] = f.Xp[((int)(i / 12))].z;
-						DoDomain(l, 1, j + 2) {	
-							m.Sr[nl][l] = Dumr[i][l - 1];	//	0 ~ j
-							m.Sz[nl][l] = Dumz[i][l - 1];
-						}
-						Dumr[i][0] = 0;
-						Dumz[i][0] = 0;
-						nl++;
-					}
-				}
-			}
-		}
-	}*/
 
 	//	Allocate Core Separatrix First
 	DoAllDomain(i, 12 * f.xpn) {
@@ -957,7 +886,7 @@ void FRAME(SYSALL& sys) {
 							Dumr[i][0] = 0;
 							Dumz[i][0] = 0;
 							nl++;
-						}						
+						}
 					}
 				}
 			}
@@ -1002,11 +931,10 @@ void FRAME(SYSALL& sys) {
 		}
 	}
 	m.Sn = nl;
-	
+
 	free_matrix<double>(Dumr, 0, 12 * f.xpn - 1, 0, limt);
 	free_matrix<double>(Dumz, 0, 12 * f.xpn - 1, 0, limt);
 	free_vector<TESTPOINT>(PreV, 0, 12 * f.xpn - 1);
 
-	printf("Done!\t  # of segments: %d\n", m.Sn);
+	printf("# of segments: %d\n", m.Sn);
 }
-

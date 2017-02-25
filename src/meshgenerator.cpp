@@ -41,7 +41,7 @@ void MESHPAR(SYSALL& sys) {
 	m.nD[SOL]	= 10;
 	m.nD[Pr]	= 10;
 	m.nD[APr]	= 0;*/	//	Move into read_par
-	
+
 	printf("RE-processing Mesh parameters\n");
 	/*	Type Define					*/
 	switch (f.xpn)
@@ -79,13 +79,13 @@ void MESHPAR(SYSALL& sys) {
 	/*	Determination of Mesh Parameter	*/
 	if (m.Type.id == DDN) {
 
-		m.Psi[APr] = (f.Xp[0].v + f.Xp[1].v - m.Type.v)	+ 
+		m.Psi[APr] = (f.Xp[0].v + f.Xp[1].v - m.Type.v)	+
 			(f.Op[0].v - (f.Xp[0].v + f.Xp[1].v - m.Type.v)) * m.GS[2];
-		m.nD[AS] = (int)fabs((m.nD[Pr] * (m.Type.v - (f.Xp[0].v + f.Xp[1].v - m.Type.v)) 
+		m.nD[AS] = (int)fabs((m.nD[Pr] * (m.Type.v - (f.Xp[0].v + f.Xp[1].v - m.Type.v))
 			/ (m.Type.v - m.Psi[APr]))) + 2;
 		m.nD[Co] -= (m.nD[AS] - 2);
 		m.nD[APr] = m.nD[Pr] - m.nD[AS] + 2;
-		m.dP[Co] = (f.Op[0].v - (f.Xp[0].v + f.Xp[1].v - m.Type.v)) * 
+		m.dP[Co] = (f.Op[0].v - (f.Xp[0].v + f.Xp[1].v - m.Type.v)) *
 			m.GS[0] / ((double)(m.nD[Co]));
 		m.dP[AS] = -((f.Xp[0].v + f.Xp[1].v - m.Type.v) - m.Type.v) / ((double)(m.nD[AS] - 1));
 		m.dP[APr] = (m.Psi[APr] - (f.Xp[0].v + f.Xp[1].v - m.Type.v)) /
@@ -95,7 +95,7 @@ void MESHPAR(SYSALL& sys) {
 		m.dP[Co] = (f.Op[0].v - m.Type.v) * m.GS[0] / ((double)(m.nD[Co]));	// Exclude separatrix
 	}
 	m.Psi[SOL] = m.Type.v - (f.Op[0].v - m.Type.v) * m.GS[1];
-	m.Psi[Pr] = m.Type.v + (f.Op[0].v - m.Type.v) * m.GS[2];	
+	m.Psi[Pr] = m.Type.v + (f.Op[0].v - m.Type.v) * m.GS[2];
 	m.dP[SOL] = (m.Psi[SOL] - m.Type.v) / ((double)(m.nD[SOL] - 1));	//	Include X point
 	m.dP[Pr] = (m.Psi[Pr] - m.Type.v) / ((double)(m.nD[Pr]));		//	Exclude X point
 
@@ -139,7 +139,7 @@ TESTPOINT NORVECTRC(SYSALL& sys, double r, double z, double fr, double fz,
 
 		dr = -(1 - w) * dz0 * LR * f.ro + w * fr;		//	LR -> -1: SOL(left?), 1: CORE, Private(right?)
 		dz =  (1 - w) * dr0 * LR * f.ro + w * fz;
-	
+
 	//DoAllDomain(i, f.xpn) {
 	//	if (r == f.Xp[i].r && z == f.Xp[i].z) {
 	//		GETFIELD(sys, r2, z2, &k1r, &k1z, d);
@@ -164,9 +164,9 @@ TESTPOINT NORVECTRC(SYSALL& sys, double r, double z, double fr, double fz,
 	//		}
 	//		break;
 	//	}
-	//}	
+	//}
 
-	
+
 		/*V = CROSSDIVT(sys, r, z, r + dr, z + dz);
 		if (V.id == 1) {
 			return V;
@@ -242,8 +242,6 @@ void STRETCHING(SYSALL & sys){
 	}
 	fclose(out);
 
-	printf("Distribution Separatrix points\t");
-
 	Dumr = alloc_matrix<double>(0, m.Sn - 1, 0, NMAX - 1);
 	Dumz = alloc_matrix<double>(0, m.Sn - 1, 0, NMAX - 1);
 	DoAllDomain(i, m.Sn) {
@@ -253,7 +251,7 @@ void STRETCHING(SYSALL & sys){
 	}
 
 	d = distance(m.Type.r, m.Type.z, f.Op[0].r, f.Op[0].z);
-	
+
 	l = alloc_vector<double>(0, KMAX - 1);
 	dl = alloc_vector<double>(0, KMAX - 1);
 
@@ -269,7 +267,7 @@ void STRETCHING(SYSALL & sys){
 			l[i] = l[i - 1] + dl[i];
 		}
 		nl = i;
-		
+
 		z = inorout(f.Op[0].r, f.Op[0].z, m.Sr[k][0], m.Sz[k][0],
 			m.Sr[k][2], m.Sz[k][2]);
 
@@ -283,7 +281,7 @@ void STRETCHING(SYSALL & sys){
 				dst = OBdy;
 			}
 		}
-		else if (m.Type.id == DDN && k < 4) {	//	
+		else if (m.Type.id == DDN && k < 4) {	//
 			if (z > 0){
 				n = m.nD[IBdy] + m.nD[IDt] - 1;
 				dst = IBdy;
@@ -342,8 +340,6 @@ void STRETCHING(SYSALL & sys){
 	free_vector<double>(l, 0, KMAX - 1);
 	free_vector<double>(dl, 0, KMAX - 1);
 
-	printf("Done!\n");
-
 	//	Print out
 	out = fopen("Sr.txt", "w");
 	DoAllDomain(j, NMAX) {
@@ -368,7 +364,7 @@ void STRETCHING(SYSALL & sys){
 	NOT USED --> Backed up
 */
 void MESHGEN(SYSALL& sys) {
-	
+
 }
 
 
@@ -479,7 +475,7 @@ TESTPOINT BVEC(SYSALL &sys, int k, int LR, int YCo) {
 	else if (YCo == 2) {		// For SN, DDN core
 		Nr = -dz0 * LR * f.ro;
 		Nz = dr0 * LR * f.ro;
-		
+
 		if ((f.Op[0].r - r)*Nr + (f.Op[0].z - z)*Nz > 0) {
 			B.r = f.Op[0].r - r;
 			B.z = f.Op[0].z - z;
@@ -529,22 +525,22 @@ TESTPOINT BVEC(SYSALL &sys, int k, int LR, int YCo) {
 }
 
 
-/*  Part Mesh Generator	*/	
+/*  Part Mesh Generator	*/
 void PARTMESHGEN(SYSALL &sys, int &k, int YCo, int nDi, int nL, int nR, double *psiL, double *psiR) {
 	usealias_geo(g, sys);
 	usealias_fld(f, sys);
 	usealias_mes(m, sys);
 	TESTPOINT	BL, BR, V;
-	double		w, wY = 1.0, wX = 2.5;
+	double		w, wY = 1.0, wX = 1.5;
 	int			i, j;
-	
+
 	//	Half upper
 	BL = BVEC(sys, k, -1, 1);	//	Start from X point
 	if (BL.id == 0)
-		Errmsg("NORMAL VECTOR TRACE ERROR IN PARTMESHGEN", -k * 10 - 5);
+		Errmsg("Error in finding BL near X-point", -k * 10 - 5);
 	BR = BVEC(sys, k,  1, 1);
 	if (BR.id == 0)
-		Errmsg("NORMAL VECTOR TRACE ERROR IN PARTMESHGEN", -k * 10 - 6);
+		Errmsg("Error in finding BR near X-point", -k * 10 - 6);
 
 	DoAllDomain(i, (nDi + 1) / 2) {
 		DoAllDomain(j, nL - 1) {	//	Left side of Matrix (SOL, AS)
@@ -552,7 +548,7 @@ void PARTMESHGEN(SYSALL &sys, int &k, int YCo, int nDi, int nL, int nR, double *
 			V = NORVECTRC(sys, m.Mr[HALF - 1 - j][k], m.Mz[HALF - 1 - j][k],
 				BL.r, BL.z, -1, psiL[j], w);
 			if (V.id == 0)
-				Errmsg("NORMAL VECTOR TRACE ERROR IN PARTMESHGEN", -k * 10 - 1);
+				Errmsg("Error in finding SOL", -k * 10 - 1);
 			m.Mr[HALF - j - 2][k] = V.r;
 			m.Mz[HALF - j - 2][k] = V.z;
 		}
@@ -561,7 +557,7 @@ void PARTMESHGEN(SYSALL &sys, int &k, int YCo, int nDi, int nL, int nR, double *
 			V = NORVECTRC(sys, m.Mr[HALF - 1 + j][k], m.Mz[HALF - 1 + j][k],
 				BR.r, BR.z,  1, psiR[j], w);
 			if (V.id == 0)
-				Errmsg("NORMAL VECTOR TRACE ERROR IN PARTMESHGEN", -k * 10 - 2);
+				Errmsg("Error in finding Core or Pr", -k * 10 - 2);
 			m.Mr[HALF + j][k] = V.r;
 			m.Mz[HALF + j][k] = V.z;
 		}
@@ -571,10 +567,10 @@ void PARTMESHGEN(SYSALL &sys, int &k, int YCo, int nDi, int nL, int nR, double *
 	//	Half under
 	BL = BVEC(sys, k + nDi / 2 - 1, -1, YCo);
 	if (BL.id == 0)
-		Errmsg("NORMAL VECTOR TRACE ERROR IN PARTMESHGEN", -k * 10 - 7);
+		Errmsg("ERROR in finding BL half under", -k * 10 - 7);
 	BR = BVEC(sys, k + nDi / 2 - 1,  1, YCo);
 	if (BR.id == 0)
-		Errmsg("NORMAL VECTOR TRACE ERROR IN PARTMESHGEN", -k * 10 - 8);
+		Errmsg("ERROR in finding BR half under", -k * 10 - 8);
 	DoAllDomain(i, nDi / 2) {
 		DoAllDomain(j, nL - 1) {	//	Left side of Matrix (SOL, AS)
 			if (YCo == 2 && i == nDi / 2 - 1){
@@ -585,7 +581,7 @@ void PARTMESHGEN(SYSALL &sys, int &k, int YCo, int nDi, int nL, int nR, double *
 					break;
 				}
 			}
-			else if (YCo != 0) 
+			else if (YCo != 0)
 				w = (erf((i - j + f.dXp[0].j - (nDi / 2 - 1)) / wX) + 1) * wY;
 			else
 				w = (erf((i + f.dXp[0].j - (nDi / 2 - 1)) / wX / 2.5) + 1) * wY;
@@ -593,7 +589,7 @@ void PARTMESHGEN(SYSALL &sys, int &k, int YCo, int nDi, int nL, int nR, double *
 			V = NORVECTRC(sys, m.Mr[HALF - 1 - j][k], m.Mz[HALF - 1 - j][k],
 				BL.r, BL.z, -1, psiL[j], w);
 			if (V.id == 0)
-				Errmsg("NORMAL VECTOR TRACE ERROR IN PARTMESHGEN", -k * 10 - 3);
+				Errmsg("Error in finding SOL, half under", -k * 10 - 3);
 			m.Mr[HALF - j - 2][k] = V.r;
 			m.Mz[HALF - j - 2][k] = V.z;
 		}
@@ -603,10 +599,10 @@ void PARTMESHGEN(SYSALL &sys, int &k, int YCo, int nDi, int nL, int nR, double *
 			else
 				w = (erf((i + f.dXp[0].j - (nDi / 2 - 1)) / wX / 2.5) + 1) * wY;
 
-			V = NORVECTRC(sys, m.Mr[HALF - 1 + j][k], m.Mz[HALF - 1 + j][k], 
+			V = NORVECTRC(sys, m.Mr[HALF - 1 + j][k], m.Mz[HALF - 1 + j][k],
 				BR.r, BR.z, 1, psiR[j], w);
 			if (V.id == 0)
-				Errmsg("NORMAL VECTOR TRACE ERROR IN PARTMESHGEN", -k * 10 - 4);
+				Errmsg("Error in finding Core or Pr, half under", -k * 10 - 4);
 			m.Mr[HALF + j][k] = V.r;
 			m.Mz[HALF + j][k] = V.z;
 		}
@@ -633,7 +629,7 @@ void MESHGEN2(SYSALL &sys) {
 	STRETCHING(sys);
 
 	nBdy = 2;
-	
+
 	DoAllDomain(i, 2 * HALF) {
 		DoAllDomain(j, KMAX) {
 			m.Mr[i][j] = 0;
@@ -682,7 +678,7 @@ void MESHGEN2(SYSALL &sys) {
 				nS = m.nD[IBdy];
 			else
 				nS = m.nD[OBdy];
-		
+
 			PARTMESHGEN(sys, k, 2, nS, m.nD[AS] + m.nD[SOL] - 1, m.nD[Co], psiL, psiR);
 		}
 	}
@@ -708,7 +704,6 @@ void MESHGEN2(SYSALL &sys) {
 				PARTMESHGEN(sys, k, 1, nS, m.nD[SOL], m.nD[Co], psiL, psiR);
 		}
 	}
-	printf("(Body) ");
 
 	/*  Other Separatrix  */
 	DoAllDomain(j, m.Sn - nBdy) {
@@ -717,8 +712,8 @@ void MESHGEN2(SYSALL &sys) {
 
 		dumVr = m.Mr[HALF - 1][k + 5] - m.Mr[HALF - 1][k];
 		dumVz = m.Mz[HALF - 1][k + 5] - m.Mz[HALF - 1][k];
-		dumV = dumVr * (f.Op[0].r - m.Type.r) + dumVz * (f.Op[0].z - m.Type.z); 
-		if ((m.Type.id == DDN) && (dumV > 0) && 
+		dumV = dumVr * (f.Op[0].r - m.Type.r) + dumVz * (f.Op[0].z - m.Type.z);
+		if ((m.Type.id == DDN) && (dumV > 0) &&
 			(m.Mr[HALF - 1][k] == m.Type.r && m.Mz[HALF - 1][k] == m.Type.z)) {
 			do
 				k++;
@@ -763,9 +758,8 @@ void MESHGEN2(SYSALL &sys) {
 
 				PARTMESHGEN(sys, k, 0, nS, m.nD[SOL], m.nD[Pr], psiL, psiR);
 			}
-			printf("-> (Divt%d)", j);
 		}
-		
+
 		//	Print out
 		out = fopen("Mr.txt", "w");
 		DoAllDomain(jj, KMAX) {
@@ -804,21 +798,19 @@ void MESHGEN2(SYSALL &sys) {
 		fprintf(out, "\n");
 	}
 	fclose(out);
-
-	printf("\tDone!\n");
 }
 
 
-/*  MESH REFINEMENT  
+/*  MESH REFINEMENT
 void MESHREFINE(SYSALL &sys) {
 	usealias_geo(g, sys);
 	usealias_fld(f, sys);
 	usealias_mes(m, sys);
 	int i, j, ii, jj;
-	
+
 	FILE *out;
 
-	
+
 
 
 

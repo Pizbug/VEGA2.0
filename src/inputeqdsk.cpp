@@ -48,9 +48,9 @@ void read_par(SYSALL& sys){
 	if(in==NULL) fprintf(stderr, "INPAR ERROR");
 	else 	printf("Read input parameters\n");
 
-	printf("  Memory allocation: MES\t");
+//	printf("  Memory allocation: MES\t");
 	memalloc_mes(sys.mes);
-	printf("Done!\n");
+//	printf("Done!\n");
 
 	get_id(in, "FILE_HEADER");	fscanf(in, "%s", FILE_HEADER);
 	printf("  FILE HEADER\t-> %s\t|", FILE_HEADER);
@@ -69,9 +69,11 @@ void read_par(SYSALL& sys){
 	printf("  Grid scope: %.4f, %.4f, %.4f\t(XO, SOL, Priv)\n",m.GS[0],m.GS[1],m.GS[2]);
 	
 	get_id(in, "EDS");
-	DoAllDomain(i, MGD)
+	DoAllDomain(i, MGD){
 		fscanf(in, "%lf %lf %lf\n", &m.EDS[i][0], &m.EDS[i][1], &m.EDS[i][2]);
-	printf("  Get E, D, S factors\n");
+		printf("%f %f %f\n", m.EDS[i][0], m.EDS[i][1], m.EDS[i][2]);
+	}
+//	printf("  Get E, D, S factors\n");
 
 	fclose(in);
 }
@@ -153,10 +155,10 @@ void read_input(SYSALL& sys){
 	printf("  Each divertor has (%d) points\n", sys.geo.dnum);
 
 	//////////////////////////////////////////////////////////
-	printf("Memory allocation: GEO, FLD\t");
+//	printf("Memory allocation: GEO, FLD\t");
 	memalloc_geo(sys.geo);
 	memalloc_fld(sys.fld, rN, zN);
-	printf("Done!\n");
+//	printf("Done!\n");
 	//////////////////////////////////////////////////////////
 
 	for(i=0;i<sys.geo.ndiv;i++){
@@ -170,7 +172,7 @@ void read_input(SYSALL& sys){
 	//////////////////////////////////////////////////////////
     /*		CONVERTING GEO DATA 							*/
     //////////////////////////////////////////////////////////
-    printf("Converting geo data\t\t");
+//    printf("Converting geo data\t\t");
     DoAllDomain(i, rN)
     	sys.geo.r[i] = data[0][3] + i * data[0][0] / (rN - 1.0);
 

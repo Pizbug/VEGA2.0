@@ -38,10 +38,10 @@ void vega() {
 
 	read_par(sys);
 	read_input(sys);
-
-	printf("========================================");
-	printf("========================================\n");
-	printf("Set up magnetic configuration\n\n");
+	
+	printf("----------------------------------------");
+	printf("----------------------------------------\n");
+	
 	FIELD(sys);
 
 	BILINEAR(sys);
@@ -50,22 +50,13 @@ void vega() {
 
 	MULTIX(sys);
 
-	printf("========================================");
-	printf("========================================\n");
-	printf("Get the SEPARATRIX LINES\n\n");
 	FRAME(sys);
 
-	printf("========================================");
-	printf("========================================\n");
-	printf("Mesh generation\n\n");
 	MESHGEN2(sys);
 
-	printf("========================================");
-	printf("========================================\n");
-	printf("Matching up the grid formats\n\n");
 	if (sys.mes.Type.id == DDN) {
 		if (sys.mes.Type.z > 0)
-			POSTP_DDNL(sys);
+			POSTP_DDNL_lite(sys);
 		else
 			POSTP_DDNU(sys);
 	}

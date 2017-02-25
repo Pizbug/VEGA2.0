@@ -9,8 +9,8 @@
 #ifndef	_PARAMETER_H
 #define	_PARAMETER_H
 
-#define NMAX	200
-#define KMAX	300
+#define NMAX	500
+#define KMAX	1000
 
 /*#define PENET	0.995
 #define SOLP	0.08

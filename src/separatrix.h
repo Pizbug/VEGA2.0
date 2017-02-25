@@ -28,7 +28,7 @@ void EXEMPTION(SYSALL& sys, int iXp, double r, double z,
 void GETFIELD(SYSALL& sys, double r, double z, dvector dr, dvector dz, double d);
 void VECTORFOLLOW(SYSALL& sys, double psi, double& r, double& z, 
 	double r0, double z0, double d, int drct);
-
+void MAXGR(SYSALL& sys, int iXp, double *newr, double *newz);
 void FRAME(SYSALL& sys);
 
 #endif
